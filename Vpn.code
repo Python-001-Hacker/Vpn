@@ -1,0 +1,22 @@
+import subprocess
+import glob
+
+# OpenVPN konfigürasyon dosyalarının yolu
+vpn_dir = "/data/data/com.termux/files/home/vpn_configs/*.ovpn"
+
+def connect_vpn(config):
+    try:
+        # VPN bağlantısını başlat
+        subprocess.Popen(['openvpn', config])
+        print(f"{config} bağlandı.")
+    except Exception as e:
+        print(f"VPN bağlantısında hata: {e}")
+
+# VPN konfigürasyon dosyalarını al
+vpn_configs = glob.glob(vpn_dir)
+
+# İlk 150 VPN'yi bağla (veya istediğin sayıyı)
+max_vpn_connections = min(150, len(vpn_configs))  # 150'den az dosya varsa onları bağla
+
+for config in vpn_configs[:max_vpn_connections]:
+    connect_vpn(config)
